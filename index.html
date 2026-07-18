@@ -1,0 +1,996 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>Pr. Elias Barbosa</title>
+    <meta
+      name="description"
+      content="Pr. Elias Barbosa, Pastor da Aviva Church. Pregações, PodFalarPastor e a comunidade da diáspora lusófona na Europa."
+    />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Pr. Elias Barbosa" />
+    <meta
+      property="og:description"
+      content="Pastor da Aviva Church. Pregações, PodFalarPastor e comunidade viva."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://elias7759-barbosa.github.io/pr-elias/assets/og-lampiao.jpg" />
+    <meta property="og:url" content="https://elias7759-barbosa.github.io/pr-elias/" />
+    <meta name="theme-color" content="#1A1209" />
+
+    <!-- Fontes: preconnect + preload da fonte critica do LCP (headline) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@400;500;600&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@400;500;600&display=swap"
+    />
+
+    <style>
+      :root {
+        --sepia: #1a1209; /* fundo dominante, nunca preto puro */
+        --sepia-2: #221808; /* variação textura */
+        --ivory: #f0e6d2; /* corpo de texto sobre escuro */
+        --amber: #e8c890; /* fios, selos, capitulares, kicker */
+        --gold: #e7bd3d; /* SÓ chama do lampião e glow */
+        --bronze: #8c5a16; /* bordas, divisores */
+        --vermelhao: #a8341e; /* acento único / CTA primário */
+        --vermelhao-hover: #c23f26;
+        --shadow-deep: rgba(0, 0, 0, 0.45);
+        /* grão de filme (feTurbulence), reutilizado no hero e no corpo da página */
+        --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        background: var(--sepia);
+        color: var(--ivory);
+        font-family: "EB Garamond", Georgia, serif;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+        overflow-x: hidden;
+        position: relative;
+      }
+      /* Grão de filme sutil no corpo inteiro da página, para não voltar ao flat abaixo do hero */
+      body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: 50;
+        pointer-events: none;
+        background-image: var(--grain);
+        background-size: 220px 220px;
+        opacity: 0.04;
+        mix-blend-mode: overlay;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      img {
+        max-width: 100%;
+        display: block;
+      }
+
+      .kicker {
+        font-family: "Cinzel", serif;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        font-size: 0.78rem;
+        color: var(--amber);
+      }
+
+      h1,
+      h2,
+      h3 {
+        font-family: "Cormorant Garamond", "EB Garamond", serif;
+        font-weight: 600;
+        margin: 0;
+        color: var(--ivory);
+      }
+
+      /* ---------- Textura de fundo (madeira/pergaminho sutil, sem imagem pesada) ---------- */
+      .textura-base {
+        background-image:
+          radial-gradient(
+            ellipse at 50% 0%,
+            rgba(232, 200, 144, 0.08),
+            transparent 60%
+          ),
+          repeating-linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.015) 0px,
+            rgba(255, 255, 255, 0.015) 1px,
+            transparent 1px,
+            transparent 3px
+          );
+      }
+
+      /* ======================= HERO, arte própria do Gemini (lampião de bronze, 19/jul) =======================
+         hero-arte  (div, z-index 0): a arte em si, ISOLADA num elemento próprio. Composição
+                     nativa: lampião e chama à DIREITA (~76% largura, ~56% altura), metade
+                     esquerda e topo já escuros/vazios no próprio quadro (zona pronta pro
+                     texto). Diferente da arte provisória anterior (que tinha moldura de
+                     museu), esta NÃO tem moldura, então SEM zoom (sem transform), só
+                     cover/posição fina para o lampião aparecer inteiro.
+         ::before   (z-index 1): tratamento de leitura (scrim linear + vinheta + calor de
+                     lampião), estático, sem animação, a trava de AA não pode nunca oscilar.
+                     O calor (radial-gradient quente) casado com a posição real da chama
+                     (76%/56%). Como a arte já nasce escura à esquerda/topo, o scrim central
+                     no desktop foi aliviado um pouco em relação ao ajuste anterior (que
+                     precisava conter um trecho claro da arte provisória), mantendo a base
+                     (onde o texto pousa) igualmente opaca.
+         hero-conteudo (z-index 2): o texto.
+         ::after    (z-index 3): grão de filme (feTurbulence), por cima de tudo, pointer-events:none. */
+      .hero {
+        position: relative;
+        min-height: 100svh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-end;
+        padding: 7vh 6vw 6vh;
+        text-align: center;
+        background: var(--sepia);
+        isolation: isolate;
+        overflow: hidden;
+      }
+
+      .hero-arte {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        background: url("assets/hero-lampiao-web.jpg") 76% 56% / cover no-repeat;
+        pointer-events: none;
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        pointer-events: none;
+        background:
+          radial-gradient(
+            ellipse at 76% 54%,
+            rgba(231, 189, 61, 0.24) 0%,
+            transparent 52%
+          ),
+          radial-gradient(
+            ellipse at center,
+            transparent 62%,
+            rgba(0, 0, 0, 0.42) 100%
+          ),
+          linear-gradient(
+            0deg,
+            rgba(26, 18, 9, 0.93) 0%,
+            rgba(26, 18, 9, 0.8) 26%,
+            rgba(26, 18, 9, 0.4) 47%,
+            rgba(26, 18, 9, 0.12) 63%,
+            rgba(26, 18, 9, 0.3) 100%
+          );
+      }
+      /* Desktop: caixa larga e baixa ainda muda o enquadramento do "cover" em relação ao
+         mobile. Scrim/vinheta reforçados aqui para garantir a MESMA trava de AA do mobile,
+         mas aliviados frente ao ajuste anterior (a arte do lampião já nasce mais escura à
+         esquerda/topo do que a arte provisória exigia). Base do scrim (.98, onde o texto
+         pousa) mantida intacta, só o patamar/vinheta intermediários respiram um pouco mais. */
+      @media (min-width: 900px) {
+        .hero::before {
+          background:
+            radial-gradient(
+              ellipse at 76% 54%,
+              rgba(231, 189, 61, 0.26) 0%,
+              transparent 55%
+            ),
+            radial-gradient(
+              ellipse at center,
+              transparent 55%,
+              rgba(0, 0, 0, 0.5) 100%
+            ),
+            linear-gradient(
+              0deg,
+              rgba(26, 18, 9, 0.95) 0%,
+              rgba(26, 18, 9, 0.82) 30%,
+              rgba(26, 18, 9, 0.42) 50%,
+              rgba(26, 18, 9, 0.13) 66%,
+              rgba(26, 18, 9, 0.34) 100%
+            );
+        }
+      }
+      .hero::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 3;
+        pointer-events: none;
+        background-image: var(--grain);
+        background-size: 220px 220px;
+        opacity: 0.05;
+        mix-blend-mode: overlay;
+      }
+
+      .hero-conteudo {
+        position: relative;
+        z-index: 2;
+        max-width: 640px;
+        /* Sombra de leitura no texto: desacopla a legibilidade AA do scrim, permitindo
+           aliviar o scrim para a CHAMA do lampião brilhar sem perder contraste do texto. */
+        text-shadow:
+          0 1px 3px rgba(0, 0, 0, 0.72),
+          0 2px 16px rgba(0, 0, 0, 0.55);
+      }
+      /* o botão tem fundo próprio (vermelhão); não precisa da sombra de leitura */
+      .hero-conteudo .cta-primario,
+      .hero-conteudo a[class*="cta"] {
+        text-shadow: none;
+      }
+
+      .hero .kicker {
+        display: block;
+        margin-bottom: 0.9rem;
+      }
+
+      .hero h1 {
+        font-size: clamp(2.3rem, 8vw, 3.6rem);
+        line-height: 1.08;
+        font-style: italic;
+      }
+
+      .hero .selo-nome {
+        font-family: "Cinzel", serif;
+        font-style: normal;
+        font-weight: 600;
+        font-size: clamp(0.95rem, 3vw, 1.1rem);
+        letter-spacing: 0.08em;
+        color: var(--amber);
+        margin-top: 1rem;
+        display: block;
+      }
+
+      .hero p.sub {
+        font-size: clamp(1.05rem, 3.6vw, 1.25rem);
+        color: var(--ivory);
+        opacity: 0.92;
+        margin-top: 1.1rem;
+        line-height: 1.5;
+      }
+
+      .credencial {
+        font-family: "Inter", sans-serif;
+        font-size: 0.82rem;
+        color: var(--amber);
+        opacity: 0.82;
+        margin-top: 0.9rem;
+        letter-spacing: 0.01em;
+      }
+
+      /* ---------- CTA primário ---------- */
+      .cta-primario {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        margin-top: 2rem;
+        padding: 1rem 2.1rem;
+        background: var(--vermelhao);
+        color: var(--ivory);
+        font-family: "Inter", sans-serif;
+        font-weight: 600;
+        font-size: 1.02rem;
+        letter-spacing: 0.02em;
+        border-radius: 999px;
+        border: 1px solid rgba(240, 230, 210, 0.18);
+        position: relative;
+        transition: transform 0.25s ease;
+        box-shadow: 0 10px 30px var(--shadow-deep);
+      }
+      .cta-primario::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        box-shadow: 0 0 0 3px rgba(231, 189, 61, 0.35);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+      .cta-primario:hover {
+        transform: translateY(-2px) scale(1.02);
+        background: var(--vermelhao-hover);
+      }
+      .cta-primario:hover::after {
+        opacity: 1;
+      }
+      .cta-primario svg {
+        width: 20px;
+        height: 20px;
+        flex-shrink: 0;
+      }
+
+      .cta-primario-legenda {
+        font-family: "Inter", sans-serif;
+        font-size: 0.74rem;
+        color: var(--amber);
+        opacity: 0.75;
+        margin-top: 0.7rem;
+      }
+
+      /* ======================= LINKS SECUNDÁRIOS ======================= */
+      .secundarios {
+        position: relative;
+        isolation: isolate;
+        padding: 4.5rem 6vw 3rem;
+        max-width: 640px;
+        margin: 0 auto;
+      }
+      /* Costura hero -> corpo: gradiente de fusão de ~100px (sépia do hero para o sépia do
+         corpo), full-bleed, no lugar do fio duro de 1px que criava uma emenda visível
+         (Zwínglio 19/jul). z-index -1 + isolation:isolate no pai: garante que a fusão fica
+         SEMPRE atrás do título/links, nunca por cima do texto. */
+      .secundarios::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 50%;
+        width: 100vw;
+        height: 100px;
+        transform: translateX(-50%);
+        background: linear-gradient(
+          180deg,
+          var(--sepia) 0%,
+          rgba(26, 18, 9, 0) 100%
+        );
+        pointer-events: none;
+        z-index: -1;
+      }
+      /* Desktop: hero e "mais caminhos" mais próximos, para segurar o momentum pós-CTA
+         (mobile mantém o respiro original, ver Zwínglio 18/jul) */
+      @media (min-width: 900px) {
+        .hero {
+          padding-bottom: 3vh;
+        }
+        .secundarios {
+          padding-top: 2.2rem;
+        }
+      }
+      .secundarios .titulo-secao {
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+      .secundarios .titulo-secao .kicker {
+        display: block;
+        margin-bottom: 0.5rem;
+      }
+      .secundarios .titulo-secao h2 {
+        font-size: clamp(1.4rem, 5vw, 1.8rem);
+        font-style: italic;
+      }
+
+      .lista-links {
+        display: flex;
+        flex-direction: column;
+        gap: 0.85rem;
+      }
+
+      .link-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1.05rem 1.3rem;
+        border: 1px solid rgba(140, 90, 22, 0.45);
+        border-radius: 14px;
+        background: linear-gradient(
+          180deg,
+          rgba(240, 230, 210, 0.03),
+          rgba(240, 230, 210, 0.01)
+        );
+        position: relative;
+        transition:
+          transform 0.25s ease,
+          border-color 0.25s ease;
+      }
+      .link-item::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        box-shadow: 0 14px 26px var(--shadow-deep);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+      .link-item:hover {
+        transform: translateY(-2px);
+        border-color: var(--gold);
+      }
+      .link-item:hover::after {
+        opacity: 1;
+      }
+
+      .link-item .icone {
+        width: 40px;
+        height: 40px;
+        flex-shrink: 0;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(231, 189, 61, 0.1);
+        border: 1px solid rgba(231, 189, 61, 0.3);
+        box-shadow: inset 0 0 12px rgba(231, 189, 61, 0.15);
+      }
+      .link-item .icone svg {
+        width: 19px;
+        height: 19px;
+        color: var(--gold);
+      }
+
+      .link-item .texto {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+      }
+      .link-item .texto .rotulo {
+        font-family: "Inter", sans-serif;
+        font-weight: 600;
+        font-size: 0.98rem;
+        color: var(--ivory);
+        display: block;
+      }
+      .link-item .texto .apoio {
+        font-family: "Inter", sans-serif;
+        font-size: 0.78rem;
+        color: var(--amber);
+        opacity: 0.75;
+        display: block;
+      }
+      .link-item .seta {
+        color: var(--amber);
+        opacity: 0.55;
+        font-size: 1.1rem;
+      }
+
+      /* ======================= O QUE VOCÊ ENCONTRA ======================= */
+      .encontra {
+        padding: 1rem 6vw 4.5rem;
+        max-width: 900px;
+        margin: 0 auto;
+      }
+      .encontra .titulo-secao {
+        text-align: center;
+        margin-bottom: 2.2rem;
+      }
+      .grid-cards {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.1rem;
+      }
+      @media (min-width: 720px) {
+        .grid-cards {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+      .card {
+        border: 1px solid rgba(140, 90, 22, 0.4);
+        border-radius: 16px;
+        padding: 1.6rem 1.4rem;
+        text-align: center;
+        position: relative;
+      }
+      .card::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        box-shadow: 0 16px 30px var(--shadow-deep);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+      .card:hover::after {
+        opacity: 1;
+      }
+      .card .glifo {
+        width: 44px;
+        height: 44px;
+        margin: 0 auto 0.9rem;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(231, 189, 61, 0.1);
+        border: 1px solid rgba(231, 189, 61, 0.3);
+        box-shadow: inset 0 0 12px rgba(231, 189, 61, 0.15);
+      }
+      .card .glifo svg {
+        width: 22px;
+        height: 22px;
+        color: var(--gold);
+      }
+      .card h3 {
+        font-family: "Cinzel", serif;
+        font-size: 0.95rem;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--amber);
+      }
+      .card p {
+        font-family: "Inter", sans-serif;
+        font-size: 0.88rem;
+        color: var(--ivory);
+        opacity: 0.85;
+        line-height: 1.5;
+        margin-top: 0.55rem;
+      }
+
+      /* ======================= RODAPÉ / SEDES ======================= */
+      footer {
+        border-top: 1px solid rgba(140, 90, 22, 0.4);
+        padding: 3rem 6vw 2.6rem;
+        text-align: center;
+      }
+      footer .sedes {
+        font-family: "Cinzel", serif;
+        font-size: 0.78rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--amber);
+        line-height: 2.1;
+      }
+      /* Célula é ponto de expansão, não sede: peso visual menor e separado (Cinzel -> Inter,
+         opacidade mais baixa), nunca nivelado às 3 sedes (canon 18/jul). */
+      footer .celula {
+        font-family: "Inter", sans-serif;
+        font-size: 0.68rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--amber);
+        opacity: 0.55;
+        margin-top: 0.7rem;
+      }
+      footer .rede-social {
+        margin-top: 1.4rem;
+        display: flex;
+        justify-content: center;
+        gap: 1.1rem;
+      }
+      footer .rede-social a {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid rgba(231, 189, 61, 0.3);
+        transition:
+          transform 0.25s ease,
+          background 0.25s ease;
+      }
+      footer .rede-social a:hover {
+        transform: translateY(-2px);
+        background: rgba(231, 189, 61, 0.12);
+      }
+      footer .rede-social svg {
+        width: 17px;
+        height: 17px;
+        color: var(--gold);
+      }
+
+      footer .rodape-legal {
+        font-family: "Inter", sans-serif;
+        font-size: 0.72rem;
+        color: var(--ivory);
+        opacity: 0.7;
+        margin-top: 1.6rem;
+      }
+
+      /* ======================= REVEAL AO ROLAR (CSS nativo, custo zero) =======================
+         Regra de robustez (gate 18/jul): o conteúdo NUNCA fica invisível. A opacidade do
+         .reveal é sempre 1, fixa, em qualquer caminho (com JS, sem JS, com ou sem suporte a
+         animation-timeline, em captura estática de tela). Só o transform (translateY) anima;
+         se algo falhar, o pior cenário é a seção aparecer estática, nunca escondida. */
+      .reveal {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      @supports (animation-timeline: view()) {
+        @media (prefers-reduced-motion: no-preference) {
+          .reveal {
+            animation: revelar linear both;
+            animation-timeline: view();
+            animation-range: entry 0% entry 55%;
+          }
+        }
+      }
+      @keyframes revelar {
+        from {
+          transform: translateY(26px);
+        }
+        to {
+          transform: translateY(0);
+        }
+      }
+
+      /* ======================= ACESSIBILIDADE ======================= */
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        ::before,
+        ::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+          scroll-behavior: auto !important;
+        }
+      }
+
+      :focus-visible {
+        outline: 2px solid var(--gold);
+        outline-offset: 3px;
+      }
+    </style>
+  </head>
+  <body class="textura-base">
+    <!-- ======================= HERO ======================= -->
+    <section class="hero" aria-label="Apresentação">
+      <div class="hero-arte" aria-hidden="true"></div>
+      <div class="hero-conteudo">
+        <span class="kicker">Pastor &middot; Aviva Church</span>
+        <h1>A Palavra pregada<br />com profundidade.</h1>
+        <span class="selo-nome">PR. ELIAS BARBOSA</span>
+        <p class="sub">
+          Teologia da Reforma vivida em comunidade, para a diáspora lusófona na
+          Europa. Sermões expositivos, ensino sólido e um convite para caminhar
+          junto.
+        </p>
+        <p class="credencial">
+          Ordenado em 2015 &middot; 3 sedes na Bélgica, Bruxelas, Namur e
+          Antuérpia, e as células de Luxemburgo e Braga
+        </p>
+
+        <!-- CTA PRIMÁRIO: inscrever no YouTube pessoal (objetivo de conversão nº1, ver nota no fim) -->
+        <a
+          class="cta-primario"
+          href="https://www.youtube.com/@pr.elias-barbosa"
+          target="_blank"
+          rel="noopener"
+        >
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path
+              d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.6 15.6V8.4L15.8 12l-6.2 3.6Z"
+            />
+          </svg>
+          Assistir e se inscrever no YouTube
+        </a>
+        <p class="cta-primario-legenda">Pregações completas, toda semana</p>
+      </div>
+    </section>
+
+    <!-- ======================= LINKS SECUNDÁRIOS ======================= -->
+    <section class="secundarios" aria-label="Outros canais">
+      <div class="titulo-secao reveal">
+        <span class="kicker">Mais caminhos</span>
+        <h2>Onde mais me encontrar</h2>
+      </div>
+
+      <div class="lista-links">
+        <a
+          class="link-item reveal"
+          href="https://www.youtube.com/playlist?list=PLNFGuJSJ_vZIPQiAAb903wN45yzGzZWzR"
+          target="_blank"
+          rel="noopener"
+        >
+          <span class="icone"
+            ><svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              aria-hidden="true"
+            >
+              <path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z" />
+              <path d="M19 11a7 7 0 0 1-14 0M12 18v3" /></svg
+          ></span>
+          <span class="texto">
+            <span class="rotulo">Ouvir o PodFalarPastor</span>
+            <span class="apoio">Conversas e ensino em áudio</span>
+          </span>
+          <span class="seta" aria-hidden="true">&rarr;</span>
+        </a>
+
+        <a
+          class="link-item reveal"
+          href="https://avivachurch.be"
+          target="_blank"
+          rel="noopener"
+        >
+          <span class="icone"
+            ><svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="9" />
+              <path d="M3 12h18M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18Z" /></svg
+          ></span>
+          <span class="texto">
+            <span class="rotulo">Visitar avivachurch.be</span>
+            <span class="apoio">Horários, sedes e visão da igreja</span>
+          </span>
+          <span class="seta" aria-hidden="true">&rarr;</span>
+        </a>
+
+        <a
+          class="link-item reveal"
+          href="https://www.instagram.com/avivachurch.b"
+          target="_blank"
+          rel="noopener"
+        >
+          <span class="icone"
+            ><svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              aria-hidden="true"
+            >
+              <rect x="3" y="3" width="18" height="18" rx="5" />
+              <circle cx="12" cy="12" r="4" />
+              <circle cx="17.4" cy="6.6" r="1" /></svg
+          ></span>
+          <span class="texto">
+            <span class="rotulo">Seguir a Aviva Church</span>
+            <span class="apoio">@avivachurch.b no Instagram</span>
+          </span>
+          <span class="seta" aria-hidden="true">&rarr;</span>
+        </a>
+
+        <a
+          class="link-item reveal"
+          href="https://discord.gg/CKx4KPsJYa"
+          target="_blank"
+          rel="noopener"
+        >
+          <span class="icone"
+            ><svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              aria-hidden="true"
+            >
+              <path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2" />
+              <circle cx="10" cy="7" r="4" />
+              <path
+                d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"
+              /></svg
+          ></span>
+          <span class="texto">
+            <span class="rotulo">Entrar na comunidade no Discord</span>
+            <span class="apoio">Acompanhamento, oração e boas-vindas</span>
+          </span>
+          <span class="seta" aria-hidden="true">&rarr;</span>
+        </a>
+
+        <a
+          class="link-item reveal"
+          href="https://www.youtube.com/@avivachurchbxl"
+          target="_blank"
+          rel="noopener"
+        >
+          <span class="icone"
+            ><svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              aria-hidden="true"
+            >
+              <path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z" />
+              <path d="M19 11a7 7 0 0 1-14 0M12 18v3" /></svg
+          ></span>
+          <span class="texto">
+            <span class="rotulo">Cultos ao vivo da Aviva Church</span>
+            <span class="apoio">@avivachurchbxl no YouTube</span>
+          </span>
+          <span class="seta" aria-hidden="true">&rarr;</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- ======================= O QUE VOCÊ ENCONTRA AQUI ======================= -->
+    <section class="encontra" aria-label="O que você encontra aqui">
+      <div class="titulo-secao reveal">
+        <span class="kicker">Nesta comunidade</span>
+        <h2>O que você encontra aqui</h2>
+      </div>
+      <div class="grid-cards">
+        <div class="card reveal">
+          <span class="glifo"
+            ><svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              aria-hidden="true"
+            >
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+              <path
+                d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"
+              /></svg
+          ></span>
+          <h3>Pregações expositivas</h3>
+          <p>
+            Texto bíblico explicado com profundidade, sem sensacionalismo,
+            semana após semana.
+          </p>
+        </div>
+        <div class="card reveal">
+          <span class="glifo"
+            ><svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              aria-hidden="true"
+            >
+              <path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z" />
+              <path d="M19 11a7 7 0 0 1-14 0M12 18v3" /></svg
+          ></span>
+          <h3>PodFalarPastor</h3>
+          <p>
+            Conversas abertas sobre fé, vida e ministério, no formato de áudio.
+          </p>
+        </div>
+        <div class="card reveal">
+          <span class="glifo"
+            ><svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              aria-hidden="true"
+            >
+              <path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2" />
+              <circle cx="10" cy="7" r="4" />
+              <path
+                d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"
+              /></svg
+          ></span>
+          <h3>Comunidade viva</h3>
+          <p>
+            Um lugar para caminhar acompanhado, não só para assistir de longe.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= RODAPÉ / SEDES ======================= -->
+    <footer>
+      <p class="sedes reveal">
+        SÁB 19H30 ANTUÉRPIA<br />
+        DOM 10H BRUXELAS<br />
+        DOM 18H NAMUR
+      </p>
+      <p class="celula reveal">SÁB 19H30 &middot; CÉLULA DE LUXEMBURGO</p>
+      <p class="celula reveal">SÁB 20H &middot; CÉLULA DE BRAGA</p>
+      <div class="rede-social reveal">
+        <a
+          href="https://www.instagram.com/pr.elias_barbosa"
+          target="_blank"
+          rel="noopener"
+          aria-label="Instagram pessoal"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            aria-hidden="true"
+          >
+            <rect x="3" y="3" width="18" height="18" rx="5" />
+            <circle cx="12" cy="12" r="4" />
+            <circle cx="17.4" cy="6.6" r="1" />
+          </svg>
+        </a>
+        <a
+          href="https://www.youtube.com/@pr.elias-barbosa"
+          target="_blank"
+          rel="noopener"
+          aria-label="YouTube pessoal"
+        >
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path
+              d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.6 15.6V8.4L15.8 12l-6.2 3.6Z"
+            />
+          </svg>
+        </a>
+        <a
+          href="https://avivachurch.be"
+          target="_blank"
+          rel="noopener"
+          aria-label="Site da Aviva Church"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="12" r="9" />
+            <path d="M3 12h18M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18Z" />
+          </svg>
+        </a>
+      </div>
+      <p class="rodape-legal">
+        Aviva Church &middot; Reformada na doutrina e carismática no Espírito
+      </p>
+    </footer>
+
+    <script>
+      // JS mínimo, sem dependências externas (página de linktree deve carregar instantaneamente).
+      // Fallback de reveal para browsers sem animation-timeline: view() (Safari/Firefox mais antigos).
+      // REGRA DE ROBUSTEZ: este script NUNCA toca em opacity. O conteúdo já nasce visível
+      // (opacity:1 fixo no CSS); aqui só adicionamos um leve translateY de entrada, e só para
+      // elementos que ainda NÃO estão na tela no carregamento (checado via getBoundingClientRect
+      // antes de animar). Threshold do IntersectionObserver em 0 (não 0.12) para disparar assim
+      // que 1px entrar em vista, evitando o bug conhecido de conteúdo preso em estado de espera.
+      (function () {
+        var suportaScrollTimeline =
+          CSS && CSS.supports && CSS.supports("animation-timeline", "view()");
+        var prefereReduzido = window.matchMedia(
+          "(prefers-reduced-motion: reduce)",
+        ).matches;
+        if (suportaScrollTimeline || prefereReduzido) return;
+
+        var alvos = document.querySelectorAll(".reveal");
+        if (!("IntersectionObserver" in window)) return; // sem suporte: fica estático e visível (opacity:1 do CSS)
+
+        var pendentes = [];
+        alvos.forEach(function (el) {
+          var rect = el.getBoundingClientRect();
+          var jaVisivel = rect.top < window.innerHeight && rect.bottom > 0;
+          if (jaVisivel) return; // já está na tela no load: não anima, permanece visível como está
+          el.style.transition = "transform .6s ease";
+          el.style.transform = "translateY(26px)";
+          pendentes.push(el);
+        });
+        if (!pendentes.length) return;
+
+        var obs = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                entry.target.style.transform = "translateY(0)";
+                obs.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0 },
+        );
+        pendentes.forEach(function (el) {
+          obs.observe(el);
+        });
+      })();
+    </script>
+  </body>
+</html>
