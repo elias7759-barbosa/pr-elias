@@ -6,7 +6,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1, viewport-fit=cover"
     />
-    <title>Pr. Elias Barbosa</title>
+    <title>Pr. Elias Barbosa | Pastor da Aviva Church | Pregações</title>
     <meta
       name="description"
       content="Pr. Elias Barbosa, Pastor da Aviva Church. Pregações, PodFalarPastor e a comunidade da diáspora lusófona na Europa."
@@ -14,15 +14,31 @@
     <meta name="robots" content="index, follow" />
 
     <!-- Open Graph -->
-    <meta property="og:title" content="Pr. Elias Barbosa" />
+    <meta
+      property="og:title"
+      content="Pr. Elias Barbosa | Pastor da Aviva Church"
+    />
     <meta
       property="og:description"
       content="Pastor da Aviva Church. Pregações, PodFalarPastor e comunidade viva."
     />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://elias7759-barbosa.github.io/pr-elias/assets/og-lampiao.jpg" />
-    <meta property="og:url" content="https://elias7759-barbosa.github.io/pr-elias/" />
+    <meta
+      property="og:image"
+      content="https://elias7759-barbosa.github.io/pr-elias/assets/og-lampiao.jpg"
+    />
+    <meta
+      property="og:url"
+      content="https://elias7759-barbosa.github.io/pr-elias/"
+    />
     <meta name="theme-color" content="#1A1209" />
+
+    <!-- Favicon: lampiao de bronze com chama ambar, SVG inline (1.10) -->
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231A1209'/%3E%3Cpath d='M32 12c7 9 11 15.5 11 21a11 11 0 0 1-22 0c0-5.5 4-12 11-21Z' fill='%23E7BD3D'/%3E%3Cpath d='M32 23c3.5 5.5 5.5 9 5.5 12a5.5 5.5 0 0 1-11 0c0-3 2-6.5 5.5-12Z' fill='%23E8C890'/%3E%3C/svg%3E"
+    />
 
     <!-- Fontes: preconnect + preload da fonte critica do LCP (headline) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -40,7 +56,6 @@
     <style>
       :root {
         --sepia: #1a1209; /* fundo dominante, nunca preto puro */
-        --sepia-2: #221808; /* variação textura */
         --ivory: #f0e6d2; /* corpo de texto sobre escuro */
         --amber: #e8c890; /* fios, selos, capitulares, kicker */
         --gold: #e7bd3d; /* SÓ chama do lampião e glow */
@@ -50,6 +65,20 @@
         --shadow-deep: rgba(0, 0, 0, 0.45);
         /* grão de filme (feTurbulence), reutilizado no hero e no corpo da página */
         --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+
+        /* Easing autoral (1.2): suave nos hovers, mola (overshoot) só no CTA primário */
+        --ease-suave: cubic-bezier(0.16, 1, 0.3, 1);
+        --ease-mola: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+        /* Escala modular, razão 1.2, base 1rem (1.5) */
+        --f-xs: 0.694rem;
+        --f-sm: 0.833rem;
+        --f-base: 1rem;
+        --f-md: 1.2rem;
+        --f-lg: 1.44rem;
+        --f-xl: 1.728rem;
+        --f-2xl: 2.074rem;
+        --f-3xl: 2.488rem;
       }
 
       * {
@@ -68,8 +97,20 @@
         text-rendering: optimizeLegibility;
         overflow-x: hidden;
         position: relative;
+        /* Micro-tipografia OpenType (1.3): kerning, ligaduras, algarismos old-style */
+        font-feature-settings:
+          "kern" 1,
+          "liga" 1,
+          "onum" 1,
+          "calt" 1;
       }
-      /* Grão de filme sutil no corpo inteiro da página, para não voltar ao flat abaixo do hero */
+      /* Grão de filme sutil no corpo inteiro da página, para não voltar ao flat abaixo do hero.
+         FIX (item 8, Zwínglio 19/jul): mix-blend-mode:overlay é ~no-op sobre fundo quase-preto
+         (--sepia #1A1209): a fórmula de overlay se comporta como multiply quando a base é
+         escura, e multiplicar qualquer valor por uma base perto de 0 dá perto de 0 — o grão
+         media 0.06 de opacidade mas ficava matematicamente invisível. Trocado para
+         mix-blend-mode:screen, que SOMA luz proporcional ao ruído independente do quão escura
+         a base é (confirmado por medição real via Playwright + screenshot, ver parecer). */
       body::after {
         content: "";
         position: fixed;
@@ -78,8 +119,8 @@
         pointer-events: none;
         background-image: var(--grain);
         background-size: 220px 220px;
-        opacity: 0.04;
-        mix-blend-mode: overlay;
+        opacity: 0.07;
+        mix-blend-mode: screen;
       }
 
       a {
@@ -90,12 +131,18 @@
         max-width: 100%;
         display: block;
       }
+      /* text-wrap:pretty nos parágrafos (balance já está nos títulos/H1/H2) */
+      @supports (text-wrap: pretty) {
+        p {
+          text-wrap: pretty;
+        }
+      }
 
       .kicker {
         font-family: "Cinzel", serif;
         letter-spacing: 0.18em;
         text-transform: uppercase;
-        font-size: 0.78rem;
+        font-size: var(--f-xs);
         color: var(--amber);
       }
 
@@ -106,6 +153,11 @@
         font-weight: 600;
         margin: 0;
         color: var(--ivory);
+        font-feature-settings:
+          "kern" 1,
+          "liga" 1,
+          "onum" 1,
+          "dlig" 1;
       }
 
       /* ---------- Textura de fundo (madeira/pergaminho sutil, sem imagem pesada) ---------- */
@@ -143,6 +195,7 @@
          ::after    (z-index 3): grão de filme (feTurbulence), por cima de tudo, pointer-events:none. */
       .hero {
         position: relative;
+        min-height: 100vh; /* fallback (1.13) para browsers sem svh */
         min-height: 100svh;
         display: flex;
         flex-direction: column;
@@ -221,17 +274,48 @@
         content: "";
         position: absolute;
         inset: 0;
-        z-index: 3;
+        z-index: 4;
         pointer-events: none;
         background-image: var(--grain);
         background-size: 220px 220px;
-        opacity: 0.05;
-        mix-blend-mode: overlay;
+        opacity: 0.09;
+        mix-blend-mode: screen;
+      }
+
+      /* ======================= CHAMA PROCEDURAL (Onda 4, WebGL) =======================
+         Canvas pequeno (~230px), ancorado sobre a região real da chama do lampião na arte
+         (76%/54%, mesma âncora do glow do scrim acima). Shader autoral: FBM com rotação
+         entre oitavas + domain-warp aninhado (turbulência assimétrica) + brasas. SEM
+         god-ray (removido no passe de 19/jul, o Zwínglio vetou por duplicar o halo já
+         pintado no scrim = lens-flare de plugin). mix-blend-mode:screen para SOMAR luz
+         sobre a arte, nunca cobrir. Nasce com opacity:0 (nunca aparece quebrado); só ganha
+         .pronta via JS depois do WebGL inicializar com sucesso. Sem WebGL / reduced-motion
+         / erro = invisível para sempre, a arte estática do hero-arte fica 100% intacta. */
+      .chama-canvas {
+        position: absolute;
+        z-index: 2;
+        left: 76%;
+        top: 54%;
+        width: min(30vw, 220px);
+        height: min(30vw, 220px);
+        transform: translate(-54%, -62%);
+        pointer-events: none;
+        mix-blend-mode: screen;
+        opacity: 0;
+        transition: opacity 1.4s var(--ease-suave);
+      }
+      .chama-canvas.pronta {
+        opacity: 0.85;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .chama-canvas {
+          display: none !important;
+        }
       }
 
       .hero-conteudo {
         position: relative;
-        z-index: 2;
+        z-index: 3;
         max-width: 640px;
         /* Sombra de leitura no texto: desacopla a legibilidade AA do scrim, permitindo
            aliviar o scrim para a CHAMA do lampião brilhar sem perder contraste do texto. */
@@ -250,10 +334,56 @@
         margin-bottom: 0.9rem;
       }
 
+      /* H1 dramático (1.1), adaptado: a headline foi substituída pela citação de John
+         Wesley (decisão do Pastor), bem mais longa que a frase curta original do plano.
+         Mantém o espírito do 1.1 (peso, text-wrap:balance, sem <br> manual) mas com clamp
+         reduzido para a citação respirar em 3-5 linhas no mobile sem estourar a dobra. */
       .hero h1 {
-        font-size: clamp(2.3rem, 8vw, 3.6rem);
-        line-height: 1.08;
+        font-size: clamp(1.7rem, 5.4vw, 3.05rem);
+        line-height: 1.18;
+        letter-spacing: -0.005em;
         font-style: italic;
+        text-wrap: balance;
+      }
+      /* Zwínglio 19/jul: em ≤360px a citação em 6 linhas engolia o lampião. Um passo abaixo
+         no piso do clamp (o piso de 1.7rem fica travado/constante em qualquer viewport <504px,
+         já que 5.4vw só ultrapassa 1.7rem acima de ~504px de largura). */
+      @media (max-width: 360px) {
+        .hero h1 {
+          font-size: clamp(1.35rem, 7vw, 1.6rem);
+        }
+      }
+      .hero h1 .atribuicao {
+        display: block;
+        margin-top: 0.9rem;
+        font-family: "Cinzel", serif;
+        font-style: normal;
+        font-weight: 600;
+        font-size: clamp(var(--f-xs), 2.1vw, var(--f-sm));
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--amber);
+      }
+
+      /* Medalhão-retrato (item C): 72px circular junto ao selo-nome, duotone sépia via CSS */
+      .identidade-medalhao {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.65rem;
+        margin-top: 1.3rem;
+      }
+      .medalhao {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        object-fit: cover;
+        flex-shrink: 0;
+        border: 2px solid var(--bronze);
+        filter: sepia(0.35) contrast(1.05) saturate(1.05);
+        box-shadow:
+          0 0 0 1px rgba(231, 189, 61, 0.25),
+          0 6px 16px rgba(0, 0, 0, 0.4);
       }
 
       .hero .selo-nome {
@@ -263,8 +393,8 @@
         font-size: clamp(0.95rem, 3vw, 1.1rem);
         letter-spacing: 0.08em;
         color: var(--amber);
-        margin-top: 1rem;
         display: block;
+        text-align: left;
       }
 
       .hero p.sub {
@@ -277,14 +407,16 @@
 
       .credencial {
         font-family: "Inter", sans-serif;
-        font-size: 0.82rem;
+        font-weight: 500;
+        font-size: var(--f-sm);
         color: var(--amber);
-        opacity: 0.82;
+        /* Zwínglio 19/jul: contraste terciário baixo sobre a arte, subir ~8-10% */
+        opacity: 0.92;
         margin-top: 0.9rem;
         letter-spacing: 0.01em;
       }
 
-      /* ---------- CTA primário ---------- */
+      /* ---------- CTA primário: placa gravada, não pílula (1.6) ---------- */
       .cta-primario {
         display: inline-flex;
         align-items: center;
@@ -295,12 +427,13 @@
         color: var(--ivory);
         font-family: "Inter", sans-serif;
         font-weight: 600;
-        font-size: 1.02rem;
+        font-size: var(--f-base);
         letter-spacing: 0.02em;
-        border-radius: 999px;
+        border-radius: 6px;
         border: 1px solid rgba(240, 230, 210, 0.18);
         position: relative;
-        transition: transform 0.25s ease;
+        /* --ease-mola (overshoot) é reservado só para o CTA primário (1.2) */
+        transition: transform 0.3s var(--ease-mola);
         box-shadow: 0 10px 30px var(--shadow-deep);
       }
       .cta-primario::after {
@@ -310,7 +443,7 @@
         border-radius: inherit;
         box-shadow: 0 0 0 3px rgba(231, 189, 61, 0.35);
         opacity: 0;
-        transition: opacity 0.3s ease;
+        transition: opacity 0.3s var(--ease-suave);
       }
       .cta-primario:hover {
         transform: translateY(-2px) scale(1.02);
@@ -327,7 +460,7 @@
 
       .cta-primario-legenda {
         font-family: "Inter", sans-serif;
-        font-size: 0.74rem;
+        font-size: var(--f-xs);
         color: var(--amber);
         opacity: 0.75;
         margin-top: 0.7rem;
@@ -361,16 +494,6 @@
         pointer-events: none;
         z-index: -1;
       }
-      /* Desktop: hero e "mais caminhos" mais próximos, para segurar o momentum pós-CTA
-         (mobile mantém o respiro original, ver Zwínglio 18/jul) */
-      @media (min-width: 900px) {
-        .hero {
-          padding-bottom: 3vh;
-        }
-        .secundarios {
-          padding-top: 2.2rem;
-        }
-      }
       .secundarios .titulo-secao {
         text-align: center;
         margin-bottom: 2rem;
@@ -384,6 +507,36 @@
         font-style: italic;
       }
 
+      /* Desktop: hero e "mais caminhos" mais próximos, para segurar o momentum pós-CTA
+         (mobile mantém o respiro original, ver Zwínglio 18/jul). QUEBRA DE SIMETRIA
+         (Zwínglio 19/jul, requisito não-opcional, gap nº1 do diagnóstico 6,6 "tudo
+         centralizado"): "Onde mais me encontrar" vira 2 colunas no desktop, título fixo
+         (sticky) à esquerda alinhado à esquerda, lista de links à direita. Este bloco vem
+         DEPOIS das regras base de propósito, pra vencer por ordem de origem (mesma
+         especificidade) sem precisar de !important. Mobile continua empilhado/centralizado. */
+      @media (min-width: 900px) {
+        .hero {
+          padding-bottom: 3vh;
+        }
+        .secundarios {
+          padding-top: 2.2rem;
+          max-width: 920px;
+          display: grid;
+          grid-template-columns: minmax(210px, 260px) 1fr;
+          gap: 1rem 3rem;
+          align-items: start;
+        }
+        .secundarios .titulo-secao {
+          text-align: left;
+          margin-bottom: 0;
+          position: sticky;
+          top: 10vh;
+        }
+        .secundarios .titulo-secao .kicker {
+          margin-bottom: 0.7rem;
+        }
+      }
+
       .lista-links {
         display: flex;
         flex-direction: column;
@@ -395,8 +548,9 @@
         align-items: center;
         gap: 1rem;
         padding: 1.05rem 1.3rem;
-        border: 1px solid rgba(140, 90, 22, 0.45);
-        border-radius: 14px;
+        /* Contraste AA (1.12): borda bronze sólida, não mais rgba .45 (1,58:1, reprovava) */
+        border: 1px solid var(--bronze);
+        border-radius: 8px;
         background: linear-gradient(
           180deg,
           rgba(240, 230, 210, 0.03),
@@ -404,8 +558,8 @@
         );
         position: relative;
         transition:
-          transform 0.25s ease,
-          border-color 0.25s ease;
+          transform 0.25s var(--ease-suave),
+          border-color 0.25s var(--ease-suave);
       }
       .link-item::after {
         content: "";
@@ -414,7 +568,7 @@
         border-radius: inherit;
         box-shadow: 0 14px 26px var(--shadow-deep);
         opacity: 0;
-        transition: opacity 0.3s ease;
+        transition: opacity 0.3s var(--ease-suave);
       }
       .link-item:hover {
         transform: translateY(-2px);
@@ -424,6 +578,8 @@
         opacity: 1;
       }
 
+      /* Glifos em "medalha de bronze" (item D): emboss via box-shadow estático (não anima
+         propriedade de layout, só usado em repouso/hover de opacidade — REGRA DE OURO ok) */
       .link-item .icone {
         width: 40px;
         height: 40px;
@@ -432,9 +588,16 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        background: rgba(231, 189, 61, 0.1);
-        border: 1px solid rgba(231, 189, 61, 0.3);
-        box-shadow: inset 0 0 12px rgba(231, 189, 61, 0.15);
+        background: radial-gradient(
+          circle at 35% 30%,
+          rgba(231, 189, 61, 0.2),
+          rgba(140, 90, 22, 0.08) 72%
+        );
+        border: 1px solid rgba(231, 189, 61, 0.32);
+        box-shadow:
+          inset 0 1px 1px rgba(255, 255, 255, 0.18),
+          inset 0 -2px 3px rgba(0, 0, 0, 0.55),
+          0 1px 0 rgba(0, 0, 0, 0.4);
       }
       .link-item .icone svg {
         width: 19px;
@@ -451,13 +614,13 @@
       .link-item .texto .rotulo {
         font-family: "Inter", sans-serif;
         font-weight: 600;
-        font-size: 0.98rem;
+        font-size: var(--f-base);
         color: var(--ivory);
         display: block;
       }
       .link-item .texto .apoio {
         font-family: "Inter", sans-serif;
-        font-size: 0.78rem;
+        font-size: var(--f-xs);
         color: var(--amber);
         opacity: 0.75;
         display: block;
@@ -489,8 +652,8 @@
         }
       }
       .card {
-        border: 1px solid rgba(140, 90, 22, 0.4);
-        border-radius: 16px;
+        border: 1px solid var(--bronze);
+        border-radius: 8px;
         padding: 1.6rem 1.4rem;
         text-align: center;
         position: relative;
@@ -502,7 +665,7 @@
         border-radius: inherit;
         box-shadow: 0 16px 30px var(--shadow-deep);
         opacity: 0;
-        transition: opacity 0.3s ease;
+        transition: opacity 0.3s var(--ease-suave);
       }
       .card:hover::after {
         opacity: 1;
@@ -515,9 +678,16 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        background: rgba(231, 189, 61, 0.1);
-        border: 1px solid rgba(231, 189, 61, 0.3);
-        box-shadow: inset 0 0 12px rgba(231, 189, 61, 0.15);
+        background: radial-gradient(
+          circle at 35% 30%,
+          rgba(231, 189, 61, 0.2),
+          rgba(140, 90, 22, 0.08) 72%
+        );
+        border: 1px solid rgba(231, 189, 61, 0.32);
+        box-shadow:
+          inset 0 1px 1px rgba(255, 255, 255, 0.18),
+          inset 0 -2px 3px rgba(0, 0, 0, 0.55),
+          0 1px 0 rgba(0, 0, 0, 0.4);
       }
       .card .glifo svg {
         width: 22px;
@@ -526,14 +696,14 @@
       }
       .card h3 {
         font-family: "Cinzel", serif;
-        font-size: 0.95rem;
+        font-size: var(--f-sm);
         letter-spacing: 0.04em;
         text-transform: uppercase;
         color: var(--amber);
       }
       .card p {
         font-family: "Inter", sans-serif;
-        font-size: 0.88rem;
+        font-size: var(--f-sm);
         color: var(--ivory);
         opacity: 0.85;
         line-height: 1.5;
@@ -542,28 +712,36 @@
 
       /* ======================= RODAPÉ / SEDES ======================= */
       footer {
-        border-top: 1px solid rgba(140, 90, 22, 0.4);
+        border-top: 1px solid var(--bronze);
         padding: 3rem 6vw 2.6rem;
         text-align: center;
       }
       footer .sedes {
         font-family: "Cinzel", serif;
-        font-size: 0.78rem;
+        font-size: var(--f-xs);
         letter-spacing: 0.1em;
         text-transform: uppercase;
         color: var(--amber);
         line-height: 2.1;
+        /* horários = tabular/old-style numerals (1.3) */
+        font-feature-settings:
+          "tnum" 1,
+          "lnum" 1;
       }
-      /* Célula é ponto de expansão, não sede: peso visual menor e separado (Cinzel -> Inter,
-         opacidade mais baixa), nunca nivelado às 3 sedes (canon 18/jul). */
+      /* Célula é ponto de expansão, não sede: peso visual menor e separado (Cinzel -> Inter),
+         nunca nivelado às 3 sedes (canon 18/jul). Contraste AA (1.12): opacity:1, cor mais
+         clara (#C9A874) em vez de âmbar a 55% (que reprovava AA). */
       footer .celula {
         font-family: "Inter", sans-serif;
         font-size: 0.68rem;
         letter-spacing: 0.06em;
         text-transform: uppercase;
-        color: var(--amber);
-        opacity: 0.55;
+        color: #c9a874;
+        opacity: 1;
         margin-top: 0.7rem;
+        font-feature-settings:
+          "tnum" 1,
+          "lnum" 1;
       }
       footer .rede-social {
         margin-top: 1.4rem;
@@ -578,14 +756,23 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        border: 1px solid rgba(231, 189, 61, 0.3);
+        background: radial-gradient(
+          circle at 35% 30%,
+          rgba(231, 189, 61, 0.2),
+          rgba(140, 90, 22, 0.08) 72%
+        );
+        border: 1px solid rgba(231, 189, 61, 0.32);
+        box-shadow:
+          inset 0 1px 1px rgba(255, 255, 255, 0.18),
+          inset 0 -2px 3px rgba(0, 0, 0, 0.55),
+          0 1px 0 rgba(0, 0, 0, 0.4);
         transition:
-          transform 0.25s ease,
-          background 0.25s ease;
+          transform 0.25s var(--ease-suave),
+          background 0.25s var(--ease-suave);
       }
       footer .rede-social a:hover {
         transform: translateY(-2px);
-        background: rgba(231, 189, 61, 0.12);
+        background: rgba(231, 189, 61, 0.16);
       }
       footer .rede-social svg {
         width: 17px;
@@ -595,7 +782,7 @@
 
       footer .rodape-legal {
         font-family: "Inter", sans-serif;
-        font-size: 0.72rem;
+        font-size: var(--f-xs);
         color: var(--ivory);
         opacity: 0.7;
         margin-top: 1.6rem;
@@ -644,244 +831,288 @@
         outline: 2px solid var(--gold);
         outline-offset: 3px;
       }
+
+      /* Skip-link (1.14): invisível até receber foco por teclado */
+      .pular-para-conteudo {
+        position: absolute;
+        top: -100px;
+        left: 1rem;
+        z-index: 100;
+        background: var(--sepia);
+        color: var(--ivory);
+        border: 1px solid var(--gold);
+        border-radius: 6px;
+        padding: 0.7rem 1.1rem;
+        font-family: "Inter", sans-serif;
+        font-size: var(--f-sm);
+        transition: top 0.2s var(--ease-suave);
+      }
+      .pular-para-conteudo:focus {
+        top: 1rem;
+      }
     </style>
   </head>
   <body class="textura-base">
-    <!-- ======================= HERO ======================= -->
-    <section class="hero" aria-label="Apresentação">
-      <div class="hero-arte" aria-hidden="true"></div>
-      <div class="hero-conteudo">
-        <span class="kicker">Pastor &middot; Aviva Church</span>
-        <h1>A Palavra pregada<br />com profundidade.</h1>
-        <span class="selo-nome">PR. ELIAS BARBOSA</span>
-        <p class="sub">
-          Teologia da Reforma vivida em comunidade, para a diáspora lusófona na
-          Europa. Sermões expositivos, ensino sólido e um convite para caminhar
-          junto.
-        </p>
-        <p class="credencial">
-          Ordenado em 2015 &middot; 3 sedes na Bélgica, Bruxelas, Namur e
-          Antuérpia, e as células de Luxemburgo e Braga
-        </p>
-
-        <!-- CTA PRIMÁRIO: inscrever no YouTube pessoal (objetivo de conversão nº1, ver nota no fim) -->
-        <a
-          class="cta-primario"
-          href="https://www.youtube.com/@pr.elias-barbosa"
-          target="_blank"
-          rel="noopener"
-        >
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path
-              d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.6 15.6V8.4L15.8 12l-6.2 3.6Z"
+    <a class="pular-para-conteudo" href="#conteudo">Pular para o conteúdo</a>
+    <main id="conteudo">
+      <!-- ======================= HERO ======================= -->
+      <section class="hero" aria-label="Apresentação">
+        <div class="hero-arte" aria-hidden="true"></div>
+        <!-- Chama procedural (Onda 4, WebGL): overlay opcional sobre a arte real, ver script no fim -->
+        <canvas class="chama-canvas" aria-hidden="true"></canvas>
+        <div class="hero-conteudo">
+          <span class="kicker">Pastor &middot; Aviva Church</span>
+          <h1>
+            &ldquo;Dai-me cem homens que não temam nada além do pecado e não
+            queiram nada além do céu, e nós atearemos fogo neste mundo.&rdquo;
+            <span class="atribuicao">&mdash; John Wesley</span>
+          </h1>
+          <div class="identidade-medalhao">
+            <img
+              class="medalhao"
+              src="assets/medalhao-elias.jpg"
+              width="72"
+              height="72"
+              alt="Pr. Elias Barbosa"
+              loading="eager"
             />
-          </svg>
-          Assistir e se inscrever no YouTube
-        </a>
-        <p class="cta-primario-legenda">Pregações completas, toda semana</p>
-      </div>
-    </section>
-
-    <!-- ======================= LINKS SECUNDÁRIOS ======================= -->
-    <section class="secundarios" aria-label="Outros canais">
-      <div class="titulo-secao reveal">
-        <span class="kicker">Mais caminhos</span>
-        <h2>Onde mais me encontrar</h2>
-      </div>
-
-      <div class="lista-links">
-        <a
-          class="link-item reveal"
-          href="https://www.youtube.com/playlist?list=PLNFGuJSJ_vZIPQiAAb903wN45yzGzZWzR"
-          target="_blank"
-          rel="noopener"
-        >
-          <span class="icone"
-            ><svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.6"
-              aria-hidden="true"
-            >
-              <path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z" />
-              <path d="M19 11a7 7 0 0 1-14 0M12 18v3" /></svg
-          ></span>
-          <span class="texto">
-            <span class="rotulo">Ouvir o PodFalarPastor</span>
-            <span class="apoio">Conversas e ensino em áudio</span>
-          </span>
-          <span class="seta" aria-hidden="true">&rarr;</span>
-        </a>
-
-        <a
-          class="link-item reveal"
-          href="https://avivachurch.be"
-          target="_blank"
-          rel="noopener"
-        >
-          <span class="icone"
-            ><svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.6"
-              aria-hidden="true"
-            >
-              <circle cx="12" cy="12" r="9" />
-              <path d="M3 12h18M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18Z" /></svg
-          ></span>
-          <span class="texto">
-            <span class="rotulo">Visitar avivachurch.be</span>
-            <span class="apoio">Horários, sedes e visão da igreja</span>
-          </span>
-          <span class="seta" aria-hidden="true">&rarr;</span>
-        </a>
-
-        <a
-          class="link-item reveal"
-          href="https://www.instagram.com/avivachurch.b"
-          target="_blank"
-          rel="noopener"
-        >
-          <span class="icone"
-            ><svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.6"
-              aria-hidden="true"
-            >
-              <rect x="3" y="3" width="18" height="18" rx="5" />
-              <circle cx="12" cy="12" r="4" />
-              <circle cx="17.4" cy="6.6" r="1" /></svg
-          ></span>
-          <span class="texto">
-            <span class="rotulo">Seguir a Aviva Church</span>
-            <span class="apoio">@avivachurch.b no Instagram</span>
-          </span>
-          <span class="seta" aria-hidden="true">&rarr;</span>
-        </a>
-
-        <a
-          class="link-item reveal"
-          href="https://discord.gg/CKx4KPsJYa"
-          target="_blank"
-          rel="noopener"
-        >
-          <span class="icone"
-            ><svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.6"
-              aria-hidden="true"
-            >
-              <path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2" />
-              <circle cx="10" cy="7" r="4" />
-              <path
-                d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"
-              /></svg
-          ></span>
-          <span class="texto">
-            <span class="rotulo">Entrar na comunidade no Discord</span>
-            <span class="apoio">Acompanhamento, oração e boas-vindas</span>
-          </span>
-          <span class="seta" aria-hidden="true">&rarr;</span>
-        </a>
-
-        <a
-          class="link-item reveal"
-          href="https://www.youtube.com/@avivachurchbxl"
-          target="_blank"
-          rel="noopener"
-        >
-          <span class="icone"
-            ><svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.6"
-              aria-hidden="true"
-            >
-              <path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z" />
-              <path d="M19 11a7 7 0 0 1-14 0M12 18v3" /></svg
-          ></span>
-          <span class="texto">
-            <span class="rotulo">Cultos ao vivo da Aviva Church</span>
-            <span class="apoio">@avivachurchbxl no YouTube</span>
-          </span>
-          <span class="seta" aria-hidden="true">&rarr;</span>
-        </a>
-      </div>
-    </section>
-
-    <!-- ======================= O QUE VOCÊ ENCONTRA AQUI ======================= -->
-    <section class="encontra" aria-label="O que você encontra aqui">
-      <div class="titulo-secao reveal">
-        <span class="kicker">Nesta comunidade</span>
-        <h2>O que você encontra aqui</h2>
-      </div>
-      <div class="grid-cards">
-        <div class="card reveal">
-          <span class="glifo"
-            ><svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.6"
-              aria-hidden="true"
-            >
-              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-              <path
-                d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"
-              /></svg
-          ></span>
-          <h3>Pregações expositivas</h3>
-          <p>
-            Texto bíblico explicado com profundidade, sem sensacionalismo,
-            semana após semana.
+            <span class="selo-nome">PR. ELIAS BARBOSA</span>
+          </div>
+          <p class="sub">
+            Teologia da Reforma vivida em comunidade, para a diáspora lusófona
+            na Europa. Sermões expositivos, ensino sólido e um convite para
+            caminhar junto.
           </p>
-        </div>
-        <div class="card reveal">
-          <span class="glifo"
-            ><svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.6"
-              aria-hidden="true"
-            >
-              <path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z" />
-              <path d="M19 11a7 7 0 0 1-14 0M12 18v3" /></svg
-          ></span>
-          <h3>PodFalarPastor</h3>
-          <p>
-            Conversas abertas sobre fé, vida e ministério, no formato de áudio.
+          <p class="credencial">
+            Ordenado em 2015 &middot; 3 sedes na Bélgica, Bruxelas, Namur e
+            Antuérpia, e as células de Luxemburgo e Braga
           </p>
-        </div>
-        <div class="card reveal">
-          <span class="glifo"
-            ><svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.6"
-              aria-hidden="true"
-            >
-              <path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2" />
-              <circle cx="10" cy="7" r="4" />
+
+          <!-- CTA PRIMÁRIO: inscrever no YouTube pessoal (objetivo de conversão nº1). 1.7/1.8:
+             rótulo de verbo único + ?sub_confirmation=1 força o diálogo nativo de inscrição. -->
+          <a
+            class="cta-primario"
+            href="https://www.youtube.com/@pr.elias-barbosa?sub_confirmation=1"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path
-                d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"
-              /></svg
-          ></span>
-          <h3>Comunidade viva</h3>
-          <p>
-            Um lugar para caminhar acompanhado, não só para assistir de longe.
-          </p>
+                d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.6 15.6V8.4L15.8 12l-6.2 3.6Z"
+              />
+            </svg>
+            Inscreva-se no meu canal
+          </a>
+          <p class="cta-primario-legenda">Pregações completas, toda semana</p>
         </div>
-      </div>
-    </section>
+      </section>
+
+      <!-- ======================= LINKS SECUNDÁRIOS ======================= -->
+      <section class="secundarios" aria-label="Outros canais">
+        <div class="titulo-secao reveal">
+          <span class="kicker">Mais caminhos</span>
+          <h2>Onde mais me encontrar</h2>
+        </div>
+
+        <div class="lista-links">
+          <a
+            class="link-item reveal"
+            href="https://www.youtube.com/playlist?list=PLNFGuJSJ_vZIPQiAAb903wN45yzGzZWzR"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span class="icone"
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                aria-hidden="true"
+              >
+                <path
+                  d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z"
+                />
+                <path d="M19 11a7 7 0 0 1-14 0M12 18v3" /></svg
+            ></span>
+            <span class="texto">
+              <span class="rotulo">Ouvir o PodFalarPastor</span>
+              <span class="apoio">Conversas e ensino em áudio</span>
+            </span>
+            <span class="seta" aria-hidden="true">&rarr;</span>
+          </a>
+
+          <a
+            class="link-item reveal"
+            href="https://avivachurch.be"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span class="icone"
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                aria-hidden="true"
+              >
+                <circle cx="12" cy="12" r="9" />
+                <path
+                  d="M3 12h18M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18Z"
+                /></svg
+            ></span>
+            <span class="texto">
+              <span class="rotulo">Visitar avivachurch.be</span>
+              <span class="apoio">Horários, sedes e visão da igreja</span>
+            </span>
+            <span class="seta" aria-hidden="true">&rarr;</span>
+          </a>
+
+          <!-- Handle IG avivachurch.b CONFIRMADO pelo Pastor em 19/jul/2026 -->
+          <a
+            class="link-item reveal"
+            href="https://www.instagram.com/avivachurch.b"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span class="icone"
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                aria-hidden="true"
+              >
+                <rect x="3" y="3" width="18" height="18" rx="5" />
+                <circle cx="12" cy="12" r="4" />
+                <circle cx="17.4" cy="6.6" r="1" /></svg
+            ></span>
+            <span class="texto">
+              <span class="rotulo">Seguir a Aviva Church</span>
+              <span class="apoio">@avivachurch.b no Instagram</span>
+            </span>
+            <span class="seta" aria-hidden="true">&rarr;</span>
+          </a>
+
+          <a
+            class="link-item reveal"
+            href="https://discord.gg/CKx4KPsJYa"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span class="icone"
+              ><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path
+                  d="M20.317 4.3698a19.7913 19.7913 0 0 0-4.8851-1.5152.0741.0741 0 0 0-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 0 0-.0785-.037 19.7363 19.7363 0 0 0-4.8852 1.515.0699.0699 0 0 0-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 0 0 .0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 0 0 .0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 0 0-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 0 1-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 0 1 .0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 0 1 .0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 0 1-.0066.1276 12.2986 12.2986 0 0 1-1.873.8914.0766.0766 0 0 0-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 0 0 .0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 0 0 .0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 0 0-.0312-.0286ZM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189Zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"
+                /></svg
+            ></span>
+            <span class="texto">
+              <span class="rotulo">Entrar na comunidade no Discord</span>
+              <span class="apoio">Acompanhamento, oração e boas-vindas</span>
+            </span>
+            <span class="seta" aria-hidden="true">&rarr;</span>
+          </a>
+
+          <!-- 1.7: função separada do CTA primário — este é o culto AO VIVO da igreja -->
+          <a
+            class="link-item reveal"
+            href="https://www.youtube.com/@avivachurchbxl"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span class="icone"
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                aria-hidden="true"
+              >
+                <path
+                  d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z"
+                />
+                <path d="M19 11a7 7 0 0 1-14 0M12 18v3" /></svg
+            ></span>
+            <span class="texto">
+              <span class="rotulo"
+                >Assistir aos cultos da igreja (ao vivo)</span
+              >
+              <span class="apoio">@avivachurchbxl no YouTube</span>
+            </span>
+            <span class="seta" aria-hidden="true">&rarr;</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- ======================= O QUE VOCÊ ENCONTRA AQUI ======================= -->
+      <section class="encontra" aria-label="O que você encontra aqui">
+        <div class="titulo-secao reveal">
+          <span class="kicker">Nesta comunidade</span>
+          <h2>O que você encontra aqui</h2>
+        </div>
+        <div class="grid-cards">
+          <div class="card reveal">
+            <span class="glifo"
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                aria-hidden="true"
+              >
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                <path
+                  d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"
+                /></svg
+            ></span>
+            <h3>Pregações expositivas</h3>
+            <p>
+              Texto bíblico explicado com profundidade, sem sensacionalismo,
+              semana após semana.
+            </p>
+          </div>
+          <div class="card reveal">
+            <span class="glifo"
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                aria-hidden="true"
+              >
+                <path
+                  d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z"
+                />
+                <path d="M19 11a7 7 0 0 1-14 0M12 18v3" /></svg
+            ></span>
+            <h3>PodFalarPastor</h3>
+            <p>
+              Conversas abertas sobre fé, vida e ministério, no formato de
+              áudio.
+            </p>
+          </div>
+          <div class="card reveal">
+            <span class="glifo"
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                aria-hidden="true"
+              >
+                <path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2" />
+                <circle cx="10" cy="7" r="4" />
+                <path
+                  d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"
+                /></svg
+            ></span>
+            <h3>Comunidade viva</h3>
+            <p>
+              Um lugar para caminhar acompanhado, não só para assistir de longe.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
 
     <!-- ======================= RODAPÉ / SEDES ======================= -->
     <footer>
@@ -896,7 +1127,7 @@
         <a
           href="https://www.instagram.com/pr.elias_barbosa"
           target="_blank"
-          rel="noopener"
+          rel="noopener noreferrer"
           aria-label="Instagram pessoal"
         >
           <svg
@@ -914,7 +1145,7 @@
         <a
           href="https://www.youtube.com/@pr.elias-barbosa"
           target="_blank"
-          rel="noopener"
+          rel="noopener noreferrer"
           aria-label="YouTube pessoal"
         >
           <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -926,7 +1157,7 @@
         <a
           href="https://avivachurch.be"
           target="_blank"
-          rel="noopener"
+          rel="noopener noreferrer"
           aria-label="Site da Aviva Church"
         >
           <svg
@@ -990,6 +1221,246 @@
         pendentes.forEach(function (el) {
           obs.observe(el);
         });
+      })();
+    </script>
+
+    <!-- ======================= CHAMA PROCEDURAL (Onda 4) =======================
+         WebGL puro, sem CDN, sem build. Shader autoral: FBM com rotação entre oitavas
+         (mata aliasing de grade) + domain-warp aninhado fbm(p+fbm(p+fbm(p))) com viés
+         vertical (turbulência assimétrica, flicker não-senoidal) para a chama, brasas
+         subindo (pontos de luz com "vida" cíclica) e rampa de cor em cosine-easing travada
+         nos stops da marca (sépia/bronze/âmbar/ouro, vermelhão só na base). SEM god-ray
+         (vetado pelo Zwínglio, duplicava o halo do scrim). Some inteiro se: sem WebGL,
+         prefers-reduced-motion:reduce, ou qualquer erro de init — a arte estática do
+         hero-arte nunca é afetada (o canvas só SOMA luz via mix-blend-mode:screen e só
+         aparece com opacity depois de "pronta"). LCP intocável: só inicia após o load da
+         página + requestIdleCallback; pausa fora da viewport e com a aba oculta. -->
+    <script>
+      (function () {
+        var canvas = document.querySelector(".chama-canvas");
+        if (!canvas) return;
+
+        var prefereReduzido = window.matchMedia(
+          "(prefers-reduced-motion: reduce)",
+        ).matches;
+        if (prefereReduzido) return; // canvas fica invisível (display:none via CSS)
+
+        function iniciar() {
+          try {
+            var ctxOpts = {
+              alpha: true,
+              premultipliedAlpha: false,
+              antialias: false,
+              depth: false,
+              stencil: false,
+              powerPreference: "low-power",
+            };
+            var gl =
+              canvas.getContext("webgl", ctxOpts) ||
+              canvas.getContext("experimental-webgl", ctxOpts);
+            if (!gl) return; // sem WebGL: canvas permanece invisível (opacity:0), nada quebra
+
+            var vsFonte =
+              "attribute vec2 aPos;" +
+              "void main(){ gl_Position = vec4(aPos, 0.0, 1.0); }";
+
+            // Ruído de valor + FBM com rotação entre oitavas (decorrelaciona grade/aliasing) +
+            // domain-warp aninhado (fbm(p + fbm(p + fbm(p))), estilo IQ) para turbulência
+            // ASSIMÉTRICA e flicker não-senoidal (Warfield/Zwínglio 19/jul: a versão anterior
+            // era laminar/simétrica de perto). Rampa de cor em cosine-easing entre stops
+            // TRAVADOS na marca (sépia -> bronze -> âmbar -> ouro, vermelhão só na base).
+            // God-ray REMOVIDO nesta passada (vetado pelo Zwínglio: duplicava o halo já
+            // pintado no scrim = efeito de lens-flare de plugin). Grão continua ESTÁTICO
+            // (bloqueado pelo Warfield animar via feTurbulence, mata fps no Safari).
+            // Coordenadas locais ao patch do canvas (0..1), origem inferior-esquerda (WebGL).
+            var fsFonte =
+              "precision mediump float;" +
+              "uniform vec2 uResolucao;" +
+              "uniform float uTempo;" +
+              "const mat2 mRot = mat2(0.80, 0.60, -0.60, 0.80);" +
+              "float hash(vec2 p){ return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453123); }" +
+              "float ruido(vec2 p){" +
+              "  vec2 i=floor(p), f=fract(p);" +
+              "  float a=hash(i), b=hash(i+vec2(1.0,0.0)), c=hash(i+vec2(0.0,1.0)), d=hash(i+vec2(1.0,1.0));" +
+              "  vec2 u=f*f*(3.0-2.0*f);" +
+              "  return mix(a,b,u.x) + (c-a)*u.y*(1.0-u.x) + (d-b)*u.x*u.y;" +
+              "}" +
+              // FBM 3 oitavas, rotacionando o domínio a cada oitava (mata o padrão de grade)
+              "float fbm(vec2 p){" +
+              "  float v=0.0, amp=0.5;" +
+              "  for (int i=0;i<3;i++){ v+=amp*ruido(p); p=mRot*p*2.03; amp*=0.5; }" +
+              "  return v;" +
+              "}" +
+              // Domain-warp aninhado: fbm(p + fbm(p + fbm(p))), com viés vertical (sobe com o
+              // tempo, distortion.y ~= -0.3*uTempo) pra turbulência subir e nunca repetir.
+              "float turbulencia(vec2 p, vec2 vies){" +
+              "  float n1 = fbm(p + vies);" +
+              "  vec2 p2 = p + vec2(n1*0.55, n1*0.55) + vies;" +
+              "  vec2 n2 = vec2(fbm(p2), fbm(p2 + vec2(5.2, 1.3)));" +
+              "  vec2 p3 = p + n2*0.55 + vies;" +
+              "  return fbm(p3);" +
+              "}" +
+              "void main(){" +
+              "  vec2 uv = gl_FragCoord.xy / uResolucao;" +
+              "  vec2 p = uv - vec2(0.5, 0.40);" +
+              "  p.x *= uResolucao.x / max(uResolucao.y, 1.0);" +
+              "  vec2 vies = vec2(0.0, -0.3*uTempo);" +
+              "  float turb = turbulencia(vec2(p.x*2.6, p.y*2.2), vies) - 0.5;" +
+              // assimetria: distorce X e Y por quantidades diferentes (não só X como antes)
+              "  vec2 pf = vec2(p.x + turb*0.16, p.y - turb*0.06);" +
+              "  float afun = smoothstep(0.0, 0.34, -p.y);" +
+              "  float r = length(vec2(pf.x*2.6, pf.y*1.35 + afun*0.16));" +
+              "  float chama = smoothstep(0.30, -0.02, r) * smoothstep(0.62, 0.05, p.y+0.30);" +
+              // rampa de cor: cosine-easing em 4 stops travados na marca (sépia->bronze->
+              // âmbar->ouro); vermelhão entra só depois, como acento fino na base.
+              "  vec3 corSepia = vec3(0.102, 0.071, 0.035);" + // --sepia #1A1209
+              "  vec3 corVermelhao = vec3(0.659, 0.204, 0.118);" + // --vermelhao #A8341E (só na base)
+              "  vec3 corBronze = vec3(0.549, 0.353, 0.086);" + // --bronze #8C5A16
+              "  vec3 corAmbar = vec3(0.910, 0.784, 0.564);" + // --amber #E8C890
+              "  vec3 corOuro = vec3(0.906, 0.741, 0.239);" + // --gold #E7BD3D
+              "  float e = 0.5 - 0.5*cos(3.14159265*clamp(chama*1.3, 0.0, 1.0));" +
+              "  vec3 corChama = mix(corSepia, corBronze, clamp(e*3.0, 0.0, 1.0));" +
+              "  corChama = mix(corChama, corAmbar, clamp(e*3.0-1.0, 0.0, 1.0));" +
+              "  corChama = mix(corChama, corOuro, clamp(e*3.0-2.0, 0.0, 1.0));" +
+              "  float baseGlow = smoothstep(0.08, -0.10, p.y) * chama * 0.30;" +
+              "  corChama = mix(corChama, corVermelhao, baseGlow);" +
+              "  float brasas = 0.0;" +
+              "  for (int i=0;i<6;i++){" +
+              "    float fi = float(i);" +
+              "    vec2 semente = vec2(fi*13.7, fi*7.1);" +
+              "    float vida = fract(uTempo*0.15 + hash(semente));" +
+              "    vec2 pos = vec2((hash(semente+1.0)-0.5)*0.5, -0.15 + vida*0.9);" +
+              "    pos.x += sin(uTempo*0.8 + fi) * 0.03;" +
+              "    float d = length(p - pos);" +
+              "    brasas += smoothstep(0.028, 0.0, d) * (1.0-vida) * 0.8;" +
+              "  }" +
+              "  vec3 cor = corChama*chama + corOuro*brasas*1.1;" +
+              "  float alfa = clamp(chama + brasas, 0.0, 1.0);" +
+              "  gl_FragColor = vec4(cor, alfa);" +
+              "}";
+
+            function criarShader(tipo, fonte) {
+              var s = gl.createShader(tipo);
+              gl.shaderSource(s, fonte);
+              gl.compileShader(s);
+              if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+                gl.deleteShader(s);
+                return null;
+              }
+              return s;
+            }
+            var vs = criarShader(gl.VERTEX_SHADER, vsFonte);
+            var fs = criarShader(gl.FRAGMENT_SHADER, fsFonte);
+            if (!vs || !fs) return;
+
+            var prog = gl.createProgram();
+            gl.attachShader(prog, vs);
+            gl.attachShader(prog, fs);
+            gl.linkProgram(prog);
+            if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return;
+            gl.useProgram(prog);
+
+            // Triângulo cheio de tela (evita o custo de um quad com 2 triângulos)
+            var buf = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+            gl.bufferData(
+              gl.ARRAY_BUFFER,
+              new Float32Array([-1, -1, 3, -1, -1, 3]),
+              gl.STATIC_DRAW,
+            );
+            var aPos = gl.getAttribLocation(prog, "aPos");
+            gl.enableVertexAttribArray(aPos);
+            gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
+
+            var uResolucao = gl.getUniformLocation(prog, "uResolucao");
+            var uTempo = gl.getUniformLocation(prog, "uTempo");
+
+            gl.enable(gl.BLEND);
+            gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+            var dpr = Math.min(window.devicePixelRatio || 1, 2);
+            var rodando = false;
+            var inicio = performance.now();
+            var quadroPendente = null;
+
+            function redimensionar() {
+              var rect = canvas.getBoundingClientRect();
+              var w = Math.max(1, Math.round(rect.width * dpr));
+              var h = Math.max(1, Math.round(rect.height * dpr));
+              if (canvas.width !== w || canvas.height !== h) {
+                canvas.width = w;
+                canvas.height = h;
+                gl.viewport(0, 0, w, h);
+              }
+            }
+            redimensionar();
+
+            function desenhar(agora) {
+              quadroPendente = null;
+              if (!rodando) return;
+              redimensionar();
+              gl.uniform2f(uResolucao, canvas.width, canvas.height);
+              gl.uniform1f(uTempo, (agora - inicio) / 1000);
+              gl.drawArrays(gl.TRIANGLES, 0, 3);
+              quadroPendente = requestAnimationFrame(desenhar);
+            }
+
+            function ligar() {
+              if (rodando) return;
+              rodando = true;
+              if (!quadroPendente)
+                quadroPendente = requestAnimationFrame(desenhar);
+            }
+            function desligar() {
+              rodando = false;
+              if (quadroPendente) {
+                cancelAnimationFrame(quadroPendente);
+                quadroPendente = null;
+              }
+            }
+
+            var heroEl = document.querySelector(".hero");
+            if (heroEl && "IntersectionObserver" in window) {
+              var obsHero = new IntersectionObserver(
+                function (entries) {
+                  entries.forEach(function (entry) {
+                    if (entry.isIntersecting && !document.hidden) ligar();
+                    else desligar();
+                  });
+                },
+                { threshold: 0 },
+              );
+              obsHero.observe(heroEl);
+            }
+
+            document.addEventListener("visibilitychange", function () {
+              if (document.hidden) {
+                desligar();
+                return;
+              }
+              if (!heroEl) return;
+              var rect = heroEl.getBoundingClientRect();
+              if (rect.top < window.innerHeight && rect.bottom > 0) ligar();
+            });
+
+            window.addEventListener("resize", redimensionar, { passive: true });
+
+            canvas.classList.add("pronta");
+            ligar();
+          } catch (e) {
+            canvas.style.display = "none"; // qualquer erro: some, arte estática intacta
+          }
+        }
+
+        function agendar() {
+          if ("requestIdleCallback" in window) {
+            requestIdleCallback(iniciar, { timeout: 1500 });
+          } else {
+            setTimeout(iniciar, 200);
+          }
+        }
+        if (document.readyState === "complete") agendar();
+        else window.addEventListener("load", agendar);
       })();
     </script>
   </body>
